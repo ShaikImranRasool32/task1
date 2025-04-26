@@ -19,6 +19,7 @@ import {
   FormControlLabel,
   Tabs,
   Tab,
+  IconButton, // Import IconButton
 } from '@mui/material';
 import {
   PieChart,
@@ -33,6 +34,7 @@ import {
   Legend,
 } from 'recharts';
 import { v4 as uuidv4 } from 'uuid';
+import { X } from 'lucide-react'; // Import the X icon for the close button
 
 // Sample data
 const cloudAccountsData = [
@@ -490,84 +492,105 @@ const Dashboard = () => {
           sx: { width: 400 }, // Increased width of the drawer
         }}
       >
-        <Box sx={{ p: 2, width: 400, marginTop: '70px' }}>
-          <Typography variant="h6" mb={2}>
-            Personalize your dashboard by adding the following widget
-          </Typography>
-          <Tabs
-            value={selectedCategory || 'cspm'}
-            onChange={(event, newValue) => handleCategoryChange(newValue)}
-            aria-label="widget categories"
-            sx={{ mb: 2 }}
+        <Box sx={{ width: 400 }}>
+          {/* Custom Title Bar */}
+          <Box
+            sx={{
+              backgroundColor: '#003366', // Dark blue background
+              color: 'white',
+              padding: 2,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
           >
-            {WIDGET_CATEGORIES.map((category) => (
-              <Tab key={category.value} value={category.value} label={category.label} />
-            ))}
-          </Tabs>
-          <Grid container spacing={2}>
-            {WIDGET_CATEGORIES.map((category) => (
-              <Grid item xs={6} key={category.value} style={{ display: selectedCategory === category.value ? 'block' : 'none' }}>
-                <Typography variant="subtitle1" sx={{ mt: 2, mb: 1 }}>{category.label}</Typography>
-                <FormGroup>
-                  {ALL_WIDGETS.filter(widget => widget.category === category.value && widget.type !== 'custom').map((widget) => (
-                    <FormControlLabel
-                      key={widget.value}
-                      control={
-                        <Checkbox
-                          checked={selectedWidgets.includes(widget.value)}
-                          onChange={(event) => handleWidgetSelect(event, widget.value)}
+            <Typography variant="h6" sx={{ color: 'white' }}>
+              Add Widget
+            </Typography>
+            <IconButton onClick={handleCloseDrawer} sx={{ color: 'white' }}>
+              <X size={20} /> {/* Use the X icon here */}
+            </IconButton>
+          </Box>
+
+          <Box sx={{ p: 2 }}>
+            <Typography variant="body1" mb={2}>
+              Personalize your dashboard by adding the following widget
+            </Typography>
+            <Tabs
+              value={selectedCategory || 'cspm'}
+              onChange={(event, newValue) => handleCategoryChange(newValue)}
+              aria-label="widget categories"
+              sx={{ mb: 2 }}
+            >
+              {WIDGET_CATEGORIES.map((category) => (
+                <Tab key={category.value} value={category.value} label={category.label} />
+              ))}
+            </Tabs>
+            <Grid container spacing={2}>
+              {WIDGET_CATEGORIES.map((category) => (
+                <Grid item xs={6} key={category.value} style={{ display: selectedCategory === category.value ? 'block' : 'none' }}>
+                  <Typography variant="subtitle1" sx={{ mt: 2, mb: 1 }}>{category.label}</Typography>
+                  <FormGroup>
+                    {ALL_WIDGETS.filter(widget => widget.category === category.value && widget.type !== 'custom').map((widget) => (
+                      <FormControlLabel
+                        key={widget.value}
+                        control={
+                          <Checkbox
+                            checked={selectedWidgets.includes(widget.value)}
+                            onChange={(event) => handleWidgetSelect(event, widget.value)}
+                          />
+                        }
+                        label={widget.label}
+                      />
+                    ))}
+                    {/* Button to add a new custom widget */}
+                    <Button
+                      variant="outlined"
+                      onClick={() => {
+                        setIsAddingNewWidget(true);
+                      }}
+                      sx={{ mt: 2 }}
+                    >
+                      Add New Widget
+                    </Button>
+                    {/* Conditional rendering for the input fields */}
+                    {isAddingNewWidget && (
+                      <Box sx={{ mt: 2 }}>
+                        <TextField
+                          label="Widget Name"
+                          value={newWidgetName}
+                          onChange={(e) => setNewWidgetName(e.target.value)}
+                          fullWidth
+                          sx={{ mb: 2 }}
                         />
-                      }
-                      label={widget.label}
-                    />
-                  ))}
-                  {/* Button to add a new custom widget */}
-                  <Button
-                    variant="outlined"
-                    onClick={() => {
-                      setIsAddingNewWidget(true);
-                    }}
-                    sx={{ mt: 2 }}
-                  >
-                    Add New Widget
-                  </Button>
-                  {/* Conditional rendering for the input fields */}
-                  {isAddingNewWidget && (
-                    <Box sx={{ mt: 2 }}>
-                      <TextField
-                        label="Widget Name"
-                        value={newWidgetName}
-                        onChange={(e) => setNewWidgetName(e.target.value)}
-                        fullWidth
-                        sx={{ mb: 2 }}
-                      />
-                      <TextField
-                        label="Widget Text"
-                        value={newWidgetText}
-                        onChange={(e) => setNewWidgetText(e.target.value)}
-                        fullWidth
-                        sx={{ mb: 2 }}
-                      />
-                      <Button
-                        variant="contained"
-                        onClick={handleAddNewWidget}
-                        fullWidth
-                      >
-                        Add
-                      </Button>
-                    </Box>
-                  )}
-                </FormGroup>
-              </Grid>
-            ))}
-          </Grid>
-          <Box mt={4} display="flex" justifyContent="flex-end" gap={2}>
-            <Button variant="outlined" onClick={handleCloseDrawer}>
-              Cancel
-            </Button>
-            <Button variant="contained" onClick={handleConfirmWidgets}>
-              Confirm
-            </Button>
+                        <TextField
+                          label="Widget Text"
+                          value={newWidgetText}
+                          onChange={(e) => setNewWidgetText(e.target.value)}
+                          fullWidth
+                          sx={{ mb: 2 }}
+                        />
+                        <Button
+                          variant="contained"
+                          onClick={handleAddNewWidget}
+                          fullWidth
+                        >
+                          Add
+                        </Button>
+                      </Box>
+                    )}
+                  </FormGroup>
+                </Grid>
+              ))}
+            </Grid>
+            <Box mt={4} display="flex" justifyContent="flex-end" gap={2}>
+              <Button variant="outlined" onClick={handleCloseDrawer}>
+                Cancel
+              </Button>
+              <Button variant="contained" onClick={handleConfirmWidgets}>
+                Confirm
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Drawer>
