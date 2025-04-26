@@ -492,8 +492,7 @@ const Dashboard = () => {
           sx: { width: 400 }, // Increased width of the drawer
         }}
       >
-        <Box sx={{ width: 400 }}>
-          {/* Custom Title Bar */}
+        <Box sx={{ p: 1, width: 400, marginTop: '50px' }}> 
           <Box
             sx={{
               backgroundColor: '#003366', // Dark blue background
