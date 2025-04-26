@@ -128,7 +128,7 @@ const NoDataWidget = ({ title, cardWidth, cardHeight }) => (
     <Card sx={{ height: '100%' }}>
       <CardContent sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         <Typography variant="subtitle1" mb={2}>{title}</Typography>
-        <Box height={200} display="flex" alignItems="center" justifyContent="center" bgcolor="#f5f5f5">
+        <Box height={190} display="flex" alignItems="center" justifyContent="center" bgcolor="#f5f5f5">
           No Graph data available!
         </Box>
       </CardContent>
@@ -177,7 +177,7 @@ const Dashboard = () => {
   }, [selectedWidgets]);
 
   const cardWidth = screenWidth ? `${screenWidth / 3.3}px` : '290px';
-  const cardHeight = screenHeight ? `${screenHeight / 3.3}px` : '190px';
+  const cardHeight = screenHeight ? `${screenHeight / 3.0}px` : '190px';
 
   const handleAddWidget = () => {
     setIsDrawerOpen(true);
